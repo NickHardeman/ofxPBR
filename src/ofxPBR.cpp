@@ -297,14 +297,16 @@ void ofxPBR::removeLight(int index) {
 void ofxPBR::beginPBR(){
 
 	glm::mat4 modelViewMatrix = ofGetCurrentMatrix(ofMatrixMode::OF_MATRIX_MODELVIEW);
-	
+    
 	// pbr
     PBRShader->begin();
 
 	// common uniforms
 	PBRShader->setUniform1i("renderMode", renderMode);
 	PBRShader->setUniformMatrix4f("viewTranspose", glm::transpose(modelViewMatrix));
-	PBRShader->setUniformMatrix4f("viewMatrix", modelViewMatrix);
+//    PBRShader->setUniformMatrix4f("viewMatrix", modelViewMatrix);
+//    PBRShader->setUniformMatrix4f("invViewMatrix", glm::inverse(modelViewMatrix));
+    PBRShader->setUniformMatrix4f("normalMatrix", ofGetCurrentNormalMatrix() );
 
     // cubemap uniforms
     if (enableCubemap && cubeMap != nullptr && cubeMap->isAllocated()) {
