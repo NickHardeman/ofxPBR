@@ -28,6 +28,8 @@ public:
 		uniform mat4 modelViewProjectionMatrix;
 		uniform vec4 globalColor;
 		uniform mat4 viewMatrix;
+        uniform mat4 normalMatrix;
+        uniform mat4 modelMatrix;
 
 		// depth camera's view projection matrix
 		uniform mat4 lightsViewProjectionMatrix;
@@ -50,8 +52,9 @@ public:
 		void SendPBRVaryings() {
 			if (renderMode == MODE_PBR) {
 				// render pass
-				m_positionVarying = inverse(viewMatrix) * modelViewMatrix * position;
-				mat4 normalMatrix = inverse(transpose(modelViewMatrix));
+//                m_positionVarying = inverse(viewMatrix) * modelViewMatrix * position;
+                m_positionVarying = modelMatrix * position;
+//                mat4 normalMatrix = inverse(transpose(modelViewMatrix));
 				mv_positionVarying = modelViewMatrix * position;
 				mv_normalVarying = vec3(mat3(normalMatrix) * normal);
 				texCoordVarying = texcoord;
@@ -60,7 +63,8 @@ public:
 			}
 			else {
 				// depth map pass
-				m_positionVarying = inverse(viewMatrix) * modelViewMatrix * position;
+//                m_positionVarying = inverse(viewMatrix) * modelViewMatrix
+                m_positionVarying = modelMatrix * position;
 				gl_Position = lightsViewProjectionMatrix * m_positionVarying;
 			}
 		});
